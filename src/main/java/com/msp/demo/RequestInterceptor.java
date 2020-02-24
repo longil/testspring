@@ -15,8 +15,6 @@ public class RequestInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(authentication.getPrincipal());
-        System.out.println(authentication.getDetails());
-        System.out.println(authentication.getAuthorities());
         return true;
     }
 }
