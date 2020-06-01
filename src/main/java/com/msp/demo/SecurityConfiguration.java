@@ -6,10 +6,12 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.sql.DataSource;
 
@@ -33,8 +35,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/user").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/**").permitAll()
-//                .antMatchers("/**").hasRole("ADMIN")
-                .and().formLogin();
+                .anyRequest().authenticated() //any other requests must be authenticated
+                .and().formLogin()
+
+                // nếu dùng jwt_token thì báo với Spring dằng đừng dùng session, để nó là stateless
+                // => ko lưu bất cứ ttin j về request trc đó
+                // vì HTTP request là stateless
+                .and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+//        http.addFilterBefore(null, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
