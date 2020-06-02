@@ -2,9 +2,11 @@ package com.msp.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+@RestController
 @SpringBootApplication
 public class DemoApplication implements WebMvcConfigurer {
 
@@ -12,10 +14,18 @@ public class DemoApplication implements WebMvcConfigurer {
         SpringApplication.run(DemoApplication.class, args);
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new RequestInterceptor());
+    @GetMapping("/")
+    public String hello() {
+        return "hello";
     }
 
+    @GetMapping("/user")
+    public String user() {
+        return "user";
+    }
 
+    @GetMapping("/admin")
+    public String admin() {
+        return "admin";
+    }
 }
